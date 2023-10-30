@@ -72,7 +72,7 @@ export class UsersService {
   async remove(id: number): Promise<User> {
     try {
       const user = await this.findOne(id);
-      return await this.usersRepository.save({ id, ...user, isActive: false });
+      return await this.usersRepository.save({ ...user, isActive: false });
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(`User with id ${id} not found`);
