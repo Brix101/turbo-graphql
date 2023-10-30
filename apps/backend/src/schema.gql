@@ -1,0 +1,104 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type User {
+  """User Id"""
+  id: Int!
+
+  """User first name"""
+  firstName: String
+
+  """User last name"""
+  lastName: String
+
+  """User email"""
+  email: String
+
+  """User password"""
+  password: String
+
+  """User is active"""
+  isActive: Boolean
+}
+
+type Query {
+  users: [User!]!
+  user(id: Int!): User!
+  products: [Product!]!
+  product(id: Int!): Product!
+  auth(id: Int!): Auth!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createAuth(createAuthInput: CreateAuthInput!): Auth!
+  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
+  removeAuth(id: Int!): Auth!
+}
+
+input CreateUserInput {
+  """User first name"""
+  firstName: String!
+
+  """User last name"""
+  lastName: String!
+
+  """User email"""
+  email: String!
+
+  """User password"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """User first name"""
+  firstName: String
+
+  """User last name"""
+  lastName: String
+
+  """User email"""
+  email: String
+
+  """User password"""
+  password: String
+  id: Int!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

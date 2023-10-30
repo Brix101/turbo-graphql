@@ -3,14 +3,15 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
-    "dev": "turbo dev --no-cache  --continue",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev": "dotenv -- turbo dev --no-cache  --continue",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
     "lint": "turbo lint",
     "test": "turbo test",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.52.0",
     "jest": "^29.7.0",
     "prettier": "^3.0.3",
