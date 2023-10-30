@@ -1,14 +1,12 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { BaseEntity } from 'src/base.entity';
+import { Entity, Column, Unique, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { hash, verify } from 'argon2';
 
 @Entity()
 @Unique(['email'])
 @ObjectType()
-export class User {
-  @PrimaryGeneratedColumn()
-  @Field(() => Int, { description: 'User Id' })
-  id: number;
-
+export class User extends BaseEntity {
   @Column()
   @Field({ nullable: true, description: 'User first name' })
   firstName: string;
@@ -22,10 +20,19 @@ export class User {
   email: string;
 
   @Column()
-  @Field({ nullable: true, description: 'User password' })
   password: string;
 
   @Column({ default: true })
   @Field({ nullable: true, description: 'User is active' })
   isActive: boolean;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    this.password = await hash(this.password);
+  }
+
+  async verifyPassword(password: string) {
+    return await verify(this.password, password);
+  }
 }

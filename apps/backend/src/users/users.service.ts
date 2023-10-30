@@ -19,8 +19,10 @@ export class UsersService {
 
   async create(createUserInput: CreateUserInput): Promise<User> {
     try {
-      return await this.usersRepository.save(createUserInput);
+      const user = this.usersRepository.create(createUserInput);
+      return await this.usersRepository.save(user);
     } catch (error) {
+      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException(
           `User ${createUserInput.email} already exists`,
@@ -53,11 +55,12 @@ export class UsersService {
   async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
     try {
       const user = await this.findOne(id);
-      return await this.usersRepository.save({
-        id,
+      const updatedUser = this.usersRepository.create({
         ...user,
         ...updateUserInput,
       });
+
+      return await this.usersRepository.save(updatedUser);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(`User with id ${id} not found`);

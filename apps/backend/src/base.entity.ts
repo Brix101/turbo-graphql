@@ -1,15 +1,21 @@
-import { Column } from 'typeorm';
+import {
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 export class BaseEntity {
-  @Column()
-  createdBy: string;
+  @Field()
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column()
-  updatedBy: string;
+  @Field()
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
-  @Column()
-  createdOn: Date;
-
-  @Column()
-  updatedOn: Date;
+  @Field()
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }
