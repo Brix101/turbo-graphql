@@ -6,6 +6,8 @@ export class LoginResponse {
   @Field()
   accessToken: string;
 
+  refreshToken: string;
+
   @Field(() => User)
   user: User;
 }

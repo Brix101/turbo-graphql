@@ -22,7 +22,6 @@ export class UsersService {
       const user = this.usersRepository.create(createUserInput);
       return await this.usersRepository.save(user);
     } catch (error) {
-      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException(
           `User ${createUserInput.email} already exists`,
@@ -40,7 +39,7 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOneById(id: number): Promise<User> {
     try {
       return await this.usersRepository.findOneOrFail({
         where: {
@@ -62,7 +61,7 @@ export class UsersService {
 
   async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
     try {
-      const user = await this.findOne(id);
+      const user = await this.findOneById(id);
       const updatedUser = this.usersRepository.create({
         ...user,
         ...updateUserInput,
@@ -70,22 +69,16 @@ export class UsersService {
 
       return await this.usersRepository.save(updatedUser);
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
-      throw new InternalServerErrorException();
+      throw error || new InternalServerErrorException();
     }
   }
 
   async remove(id: number): Promise<User> {
     try {
-      const user = await this.findOne(id);
+      const user = await this.findOneById(id);
       return await this.usersRepository.save({ ...user, isActive: false });
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
-      throw new Error('Internal server error');
+      throw error || new InternalServerErrorException();
     }
   }
 }

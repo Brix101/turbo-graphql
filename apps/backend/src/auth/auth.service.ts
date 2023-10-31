@@ -32,11 +32,12 @@ export class AuthService {
   }
 
   async login(user: User): Promise<LoginResponse | null> {
-    const payload: PayloadObj = {
-      sub: user.id,
-      email: user.email,
-    };
-    const accessToken = await this.jwtService.signAsync(payload);
-    return { accessToken, user };
+    const payload: PayloadObj = { sub: user.id };
+
+    const accessToken = await this.jwtService.signAsync(payload, {});
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '90d',
+    });
+    return { accessToken, refreshToken, user };
   }
 }
