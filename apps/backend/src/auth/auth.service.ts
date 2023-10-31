@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/entities/user.entity';
-import { omit } from 'lodash';
-import { LoginResponse } from './dto/login-response.dto';
 import { JwtService } from '@nestjs/jwt';
+import { omit } from 'lodash';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { LoginResponse } from './dto/login-response.dto';
 import { PayloadObj } from './dto/payload';
 
 @Injectable()
@@ -39,5 +39,16 @@ export class AuthService {
       expiresIn: '90d',
     });
     return { accessToken, refreshToken, user };
+  }
+
+  async refreshToken(user?: User): Promise<string | null> {
+    if (user) {
+      const payload: PayloadObj = { sub: user.id };
+
+      const accessToken = await this.jwtService.signAsync(payload, {});
+      return accessToken;
+    }
+
+    return null;
   }
 }
