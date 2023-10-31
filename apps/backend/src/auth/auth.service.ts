@@ -41,12 +41,12 @@ export class AuthService {
     return { accessToken, refreshToken, user };
   }
 
-  async refreshToken(user?: User): Promise<string | null> {
+  async refreshToken(user?: User): Promise<{ accessToken: string } | null> {
     if (user) {
       const payload: PayloadObj = { sub: user.id };
 
       const accessToken = await this.jwtService.signAsync(payload, {});
-      return accessToken;
+      return { accessToken };
     }
 
     return null;
