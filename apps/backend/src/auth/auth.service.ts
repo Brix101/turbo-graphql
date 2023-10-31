@@ -4,7 +4,6 @@ import { omit } from 'lodash';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginResponse } from './dto/login-response.dto';
-import { PayloadObj } from './dto/payload';
 
 @Injectable()
 export class AuthService {
@@ -31,21 +30,36 @@ export class AuthService {
     return omit(user, 'password');
   }
 
-  async login(user: User): Promise<LoginResponse | null> {
-    const payload: PayloadObj = { sub: user.id };
-
-    const accessToken = await this.jwtService.signAsync(payload, {});
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '90d',
-    });
+  async login(user: User): Promise<LoginResponse> {
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      {},
+    );
+    const refreshToken = await this.jwtService.signAsync(
+      { sub: user.id },
+      {
+        expiresIn: '90d',
+      },
+    );
     return { accessToken, refreshToken, user };
   }
 
   async refreshToken(user?: User): Promise<{ accessToken: string } | null> {
     if (user) {
-      const payload: PayloadObj = { sub: user.id };
-
-      const accessToken = await this.jwtService.signAsync(payload, {});
+      const accessToken = await this.jwtService.signAsync(
+        {
+          sub: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+        {},
+      );
       return { accessToken };
     }
 

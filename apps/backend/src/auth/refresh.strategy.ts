@@ -6,7 +6,6 @@ import { Strategy } from 'passport-jwt';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { jwtConstants } from './constants';
-import { PayloadObj } from './dto/payload';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
@@ -22,7 +21,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     });
   }
 
-  async validate(payload: PayloadObj): Promise<Partial<User> | null> {
+  async validate(payload: any): Promise<Partial<User> | null> {
     const user = await this.usersService.findOneById(payload.sub);
     if (!user) {
       throw new UnauthorizedException();

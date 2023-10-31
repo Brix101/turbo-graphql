@@ -1,7 +1,7 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { BaseEntity } from 'src/base.entity';
-import { Entity, Column, Unique, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { hash, verify } from 'argon2';
+import { BaseEntity } from 'src/base.entity';
+import { BeforeInsert, BeforeUpdate, Column, Entity, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['email'])
@@ -34,5 +34,14 @@ export class User extends BaseEntity {
 
   async verifyPassword(password: string) {
     return await verify(this.password, password);
+  }
+
+  toPayload() {
+    return {
+      sub: this.id,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+    };
   }
 }
