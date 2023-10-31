@@ -1,12 +1,13 @@
-import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
-import { AuthService } from './auth.service';
-import { LoginInput } from './dto/create-auth.input';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from './gql-auth.guard';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
-import { LoginResponse } from './dto/login-response.dto';
-import { CurrentUser } from './current-user';
 import { UsersService } from 'src/users/users.service';
+import { AuthService } from './auth.service';
+import { jwtConstants } from './constants';
+import { CurrentUser } from './current-user';
+import { LoginInput } from './dto/create-auth.input';
+import { LoginResponse } from './dto/login-response.dto';
+import { GqlAuthGuard } from './gql-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Resolver()
@@ -24,7 +25,12 @@ export class AuthResolver {
   ) {
     const result = await this.authService.login(ctx.user);
 
-    ctx.res.cookie('x-refresh-token', result.refreshToken);
+    ctx.res.cookie(jwtConstants.cookieKey, result.refreshToken, {
+      path: '/', // Replace with your desired path
+      httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+      secure: false, // Ensures the cookie is only sent over HTTPS
+      // maxAge: 31536000000, // Set the expiration to one year in milliseconds
+    });
     return result;
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { omit } from 'lodash';
@@ -14,22 +14,19 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     super({
       jwtFromRequest: function (req: Request) {
         var token = null;
-        if (req && req.cookies) token = req.cookies['x-refresh-token'];
+        if (req && req.cookies) token = req.cookies[jwtConstants.cookieKey];
         return token;
       },
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
-      passReqToCallback: true,
-      logging: true,
     });
   }
 
   async validate(payload: PayloadObj): Promise<Partial<User> | null> {
     const user = await this.usersService.findOneById(payload.sub);
     if (!user) {
-      return null; // Return null if the user doesn't exist
+      throw new UnauthorizedException();
     }
-
     return omit(user, 'password');
   }
 }
