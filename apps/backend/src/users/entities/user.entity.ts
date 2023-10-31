@@ -8,15 +8,15 @@ import { hash, verify } from 'argon2';
 @ObjectType()
 export class User extends BaseEntity {
   @Column()
-  @Field({ nullable: true, description: 'User first name' })
+  @Field({ nullable: false, description: 'User first name' })
   firstName: string;
 
   @Column()
-  @Field({ nullable: true, description: 'User last name' })
+  @Field({ nullable: false, description: 'User last name' })
   lastName: string;
 
   @Column({ unique: true })
-  @Field({ nullable: true, description: 'User email' })
+  @Field({ nullable: false, description: 'User email' })
   email: string;
 
   @Column()

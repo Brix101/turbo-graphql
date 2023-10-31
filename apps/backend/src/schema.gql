@@ -2,29 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-type Product {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type User {
   id: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 
   """User first name"""
-  firstName: String
+  firstName: String!
 
   """User last name"""
-  lastName: String
+  lastName: String!
 
   """User email"""
-  email: String
+  email: String!
 
   """User is active"""
   isActive: Boolean
@@ -35,24 +25,31 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
   products: [Product!]!
   product(id: Int!): Product!
-  auth(id: Int!): Auth!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  login(loginInput: LoginInput!): LoginResponse!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
   removeProduct(id: Int!): Product!
-  createAuth(createAuthInput: CreateAuthInput!): Auth!
-  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
-  removeAuth(id: Int!): Auth!
 }
 
 input CreateUserInput {
@@ -84,23 +81,17 @@ input UpdateUserInput {
   id: Int!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 input CreateProductInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
 input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateAuthInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateAuthInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
