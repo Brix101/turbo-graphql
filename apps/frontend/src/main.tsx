@@ -43,7 +43,7 @@ const requestLink = new ApolloLink(
       return () => {
         if (handle) handle.unsubscribe();
       };
-    })
+    }),
 );
 
 const client = new ApolloClient({
@@ -72,7 +72,7 @@ const client = new ApolloClient({
         });
       },
       fetchAccessToken: () => {
-        return fetch("http://192.168.254.117:3000/refresh_token", {
+        return fetch("/api/refresh_token", {
           method: "GET",
           credentials: "include",
         });
@@ -86,13 +86,9 @@ const client = new ApolloClient({
         console.error(err);
       },
     }),
-    // onError(({ graphQLErrors, networkError }) => {
-    //   console.log(graphQLErrors);
-    //   console.log(networkError);
-    // }),
     requestLink,
     new HttpLink({
-      uri: "http://192.168.254.117:3000/graphql",
+      uri: "/api/graphql",
       credentials: "include",
     }),
   ]),
@@ -107,7 +103,7 @@ if (el) {
       <ApolloProvider client={client}>
         <App />
       </ApolloProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 } else {
   throw new Error("Could not find root element");

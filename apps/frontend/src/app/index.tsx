@@ -8,12 +8,14 @@ function App(): JSX.Element {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetch("http://192.168.254.117:3000/refresh_token", {
+    fetch("/api/refresh_token", {
       method: "GET",
       credentials: "include",
     }).then(async (x) => {
-      const { accessToken } = await x.json();
-      setAccessToken(accessToken);
+      try {
+        const { accessToken } = await x.json();
+        setAccessToken(accessToken);
+      } catch (err) {}
       setLoading(false);
     });
   }, []);
