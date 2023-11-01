@@ -7,7 +7,7 @@ export const getAccessToken = (): string => {
   return accessToken;
 };
 
-const refresher = new TokenRefreshLink({
+const refresherLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
   isTokenValidOrUndefined: () => {
     return new Promise<boolean>((resolve) => {
@@ -26,9 +26,10 @@ const refresher = new TokenRefreshLink({
       credentials: "include",
     });
   },
-  handleFetch: (restoken) => {
-    accessToken = restoken;
+  handleFetch: (newToken) => {
+    accessToken = newToken;
   },
+  handleError: () => {},
 });
 
-export default refresher;
+export default refresherLink;
